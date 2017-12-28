@@ -61,10 +61,3 @@ replace_NA_by_mean <- function(DFcolumn){
   sapply(emp_survey, function(x){levels(as.factor(x))}) # Levels are OK and within limit  as mentioned in dictionary, No invalid data
     
 # manager_survey : Data Cleaning and Processing
-  
-  # Check for NA
-  sapply(manager_survey, function(x){sum(is.na(x))}) # No NA Values 
-  # Check Data Validity
-  sapply(manager_survey, function(x){levels(as.factor(x))}) # Levels are OK and within limit as mentioned in dictionary, No invalid data
-  
-  
