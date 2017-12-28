@@ -23,10 +23,3 @@ emp_survey <- read.csv("employee_survey_data.csv", stringsAsFactors = T)
 gen_data <- read.csv("general_data.csv",stringsAsFactors = T)
 in_time <- read.csv("in_time.csv",stringsAsFactors = T)
 out_time <- read.csv("out_time.csv",stringsAsFactors = T)
-manager_survey <- read.csv("manager_survey_data.csv",stringsAsFactors = T)
-
-# Function to replace NA by mean
-replace_NA_by_mean <- function(DFcolumn){
-  DFcolumn[is.na(DFcolumn)] <- round(mean(DFcolumn[!is.na(DFcolumn)]))
-  DFcolumn
-}
