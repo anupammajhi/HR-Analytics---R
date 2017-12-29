@@ -88,3 +88,35 @@ replace_NA_by_mean <- function(DFcolumn){
   })
   
   # Check Data Validity
+  sapply(gen_data, function(x){levels(as.factor(x))}) # Levels are OK and within limit, No invalid data
+  
+# In_time and Out_time : Data Cleaning and Processing
+
+  # NA values in these simply mean the employee didn't come to office and the biometric was not registered, hence not imputing
+  
+  # Coverting time to POSIXlt data for easy calculation of times  
+  in_time_1 <- data.frame(sapply(in_time[,-1], function(x){ as.POSIXlt(x, format = "%Y-%m-%d %H:%M:%S")} ))
+  out_time_1 <- data.frame(sapply(out_time[,-1], function(x){ as.POSIXlt(x, format = "%Y-%m-%d %H:%M:%S")} ))
+
+
+#====================== DERIVE VARIABLES =========================    
+  
+  # Derive variable : worked_hours
+  time_1 <- out_time_1 - in_time_1 # Subtracting (OutTime - Intime)
+  class(time_1$X2015.01.01)
+
+  time_df <- cbind(out_time$X,time_1) # Binding Employee ID and derived variable to time_df
+  colnames(time_df)[1]  <- "EmployeeID"
+  
+  time_df[-1] <- lapply(time_df[-1], unclass)
+  time_df[-1] <- lapply(time_df[-1], as.numeric) # Converting to numeric
+  
+  time_df$worked_hours_mean <- rowMeans(time_df[-1],na.rm = T) # Finding mean of worked_hours_mean
+
+  time_df <- time_df[,c("EmployeeID","worked_hours_mean")]  
+   
+  # Derive Variable : out_of_office
+  
+  # calculating number of days on off/leave/out of office 
+  time_df$out_of_office <- rowSums(is.na(time_1))
+  
