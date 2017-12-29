@@ -114,9 +114,3 @@ replace_NA_by_mean <- function(DFcolumn){
   time_df$worked_hours_mean <- rowMeans(time_df[-1],na.rm = T) # Finding mean of worked_hours_mean
 
   time_df <- time_df[,c("EmployeeID","worked_hours_mean")]  
-   
-  # Derive Variable : out_of_office
-  
-  # calculating number of days on off/leave/out of office 
-  time_df$out_of_office <- rowSums(is.na(time_1))
-  
