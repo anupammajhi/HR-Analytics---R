@@ -88,10 +88,3 @@ replace_NA_by_mean <- function(DFcolumn){
   })
   
   # Check Data Validity
-  sapply(gen_data, function(x){levels(as.factor(x))}) # Levels are OK and within limit, No invalid data
-  
-# In_time and Out_time : Data Cleaning and Processing
-
-  # NA values in these simply mean the employee didn't come to office and the biometric was not registered, hence not imputing
-  
-  # Coverting time to POSIXlt data for easy calculation of times  
