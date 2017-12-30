@@ -154,3 +154,46 @@ replace_NA_by_mean <- function(DFcolumn){
   # Attrition Frequency  
   mainDF %>%
     ggplot(aes(x = Attrition)) +
+    geom_bar(aes(y = (..count..), fill = Attrition)) +
+    geom_text(aes(y = (..count..), label = scales::percent((..count..)/sum(..count..))), stat = "count", vjust = -0.25) +
+    labs(title = "Attrition Frequency", y = "Count", x = "Attrition")+
+    scale_fill_manual(values = c("Yes" = "darkred", "No" = "darkgreen"))
+  
+  # There is an attrition of 16.1%
+  
+
+  # Job Satisfaction
+  mainDF %>%
+    ggplot(aes(x = as.factor(JobSatisfaction))) +
+    geom_bar(aes(y = (..count..), fill = JobSatisfaction)) +
+    geom_text(aes(y = (..count..), label = scales::percent((..count..)/sum(..count..))), stat = "count", vjust = -0.25) +
+    labs(title = "Job Satisfaction Score", y = "Count", x = "Job Satisfaction Levels")+
+    scale_fill_continuous(low = "darkred", high = "darkgreen")
+  
+  # Though Job Satisfaction seems to be quite good , still there are about 40% employees with 2 or lower Job satisfaction rating
+  
+  
+  # Work Life balance
+  mainDF %>%
+    ggplot(aes(x = as.factor(WorkLifeBalance))) +
+    geom_bar(aes(y = (..count..), fill = WorkLifeBalance)) +
+    geom_text(aes(y = (..count..), label = scales::percent((..count..)/sum(..count..))), stat = "count", vjust = -0.25) +
+    labs(title = "Work-Life Balance Score", y = "Count", x = "Work-Life Balance Levels")+
+    scale_fill_continuous("Work-Life Balance",low = "darkred", high = "darkgreen")
+  
+  # Work Life balance seems to be quite average and about 28.5% people are not so happy with the Work-Life balance
+  
+  
+  # Years Since Last Promotion
+  mainDF %>%
+    ggplot(aes(x = as.factor(YearsSinceLastPromotion))) +
+    geom_bar(aes(y = (..count..), fill = YearsSinceLastPromotion)) +
+    geom_text(aes(y = (..count..), label = scales::percent((..count..)/sum(..count..))), stat = "count", vjust = 0.5, hjust=-0.1 ,angle = 90) +
+    labs(title = "Years Since Last Promotion", y = "Count", x = "Years Since Last Promotion")+
+    scale_fill_continuous("Years",low = "darkred", high = "darkgreen")
+  
+  # Though there are very few people don't get promoted for a long time, about 25% employees don't get promotion for more than 3 years 
+  
+  
+
+  # MaritalStatus~Attrition
