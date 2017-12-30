@@ -225,11 +225,3 @@ replace_NA_by_mean <- function(DFcolumn){
     geom_bar(aes(y = ..prop.., fill = as.factor(..x..)), stat="count") + 
     scale_y_continuous(labels=scales::percent) +
     geom_text(aes(y = (..prop..), label = scales::percent((..prop..)/sum(..prop..))), stat = "count", vjust = -0.5)+
-    labs(title = "Business Travel Vs Attrition", y = "Percentage Attrition", x = "Business Travel")+
-    facet_grid(~Attrition)+
-    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5))
-  
-  # People travelling more tend to stay back with the company 
-  
-  
-  # YearsWithCurrManager~Attrition
