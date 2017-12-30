@@ -189,3 +189,47 @@ replace_NA_by_mean <- function(DFcolumn){
     ggplot(aes(x = as.factor(YearsSinceLastPromotion))) +
     geom_bar(aes(y = (..count..), fill = YearsSinceLastPromotion)) +
     geom_text(aes(y = (..count..), label = scales::percent((..count..)/sum(..count..))), stat = "count", vjust = 0.5, hjust=-0.1 ,angle = 90) +
+    labs(title = "Years Since Last Promotion", y = "Count", x = "Years Since Last Promotion")+
+    scale_fill_continuous("Years",low = "darkred", high = "darkgreen")
+  
+  # Though there are very few people don't get promoted for a long time, about 25% employees don't get promotion for more than 3 years 
+  
+  
+
+  # MaritalStatus~Attrition
+  mainDF %>%
+    ggplot(aes(x = MaritalStatus, group = Attrition)) + 
+    geom_bar(aes(y = ..prop.., fill = as.factor(..x..)), stat="count") + 
+    scale_y_continuous(labels=scales::percent) +
+    geom_text(aes(y = (..prop..), label = scales::percent((..prop..)/sum(..prop..))), stat = "count", vjust = -0.5)+
+    labs(title = "Marital-Status Vs Attrition", y = "Percentage Attrition", x = "Marital Status")+
+    facet_grid(~Attrition)
+  
+  # Clearly people who are single tend to leave the company more often, whereas married and divorced people tend to stay back longer
+  
+  
+  # OverTime~Attrition
+  mainDF[which(mainDF$overtime_count > 1),] %>%
+    ggplot(aes(x = overtime_count, group = Attrition)) + 
+    geom_bar(aes(y = ..prop..)) + 
+    scale_y_continuous(labels=scales::percent) +
+    labs(title = "Overtiming Vs Attrition", y = "Percentage Attrition", x = "Overtime Frequency")+
+    facet_grid(~Attrition)
+  
+  # More people who overtime a lot throughout the year tend to leave the company
+  
+  
+  # BusinessTravel~Attrition
+  mainDF %>%
+    ggplot(aes(x = BusinessTravel, group = Attrition)) + 
+    geom_bar(aes(y = ..prop.., fill = as.factor(..x..)), stat="count") + 
+    scale_y_continuous(labels=scales::percent) +
+    geom_text(aes(y = (..prop..), label = scales::percent((..prop..)/sum(..prop..))), stat = "count", vjust = -0.5)+
+    labs(title = "Business Travel Vs Attrition", y = "Percentage Attrition", x = "Business Travel")+
+    facet_grid(~Attrition)+
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5))
+  
+  # People travelling more tend to stay back with the company 
+  
+  
+  # YearsWithCurrManager~Attrition
