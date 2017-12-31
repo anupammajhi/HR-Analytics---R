@@ -318,3 +318,38 @@ replace_NA_by_mean <- function(DFcolumn){
   mainDF_facts <- mainDF[,colnames(mainDF) %in% c("Department","EducationField","JobRole","MaritalStatus")]
   dummies <- data.frame(sapply( mainDF_facts , function(x){data.frame(model.matrix(~x))[,-1]}))
   mainDF <- cbind(mainDF,dummies)
+
+  # Excluding columns where dummies have been created 
+  mainDF <- mainDF[,!colnames(mainDF) %in% c("Department","EducationField","JobRole","MaritalStatus")]
+  
+  # Normalizing continuous variables
+  
+  toNormalize <- mainDF[,colnames(mainDF) %in% c("Age","DistanceFromHome","MonthlyIncome","NumCompaniesWorked","PercentSalaryHike","TotalWorkingYears","TrainingTimesLastYear","YearsAtCompany","YearsSinceLastPromotion","YearsSinceLastPromotion","YearsWithCurrManager","worked_hours_mean","out_of_office","overtime_count","undertime_count")]
+  
+  normalized <- data.frame(sapply(toNormalize,function(x){scale(x)})) # All normalized columns
+
+  mainDF <- cbind(mainDF[,!colnames(mainDF) %in% colnames(toNormalize)],normalized) # Replacing Unscaled columns with scaled columns
+  
+#========================= MODEL BUILDING - LINEAR MODELLING ==============================
+  
+  # Set seed for random number reproducibility
+  set.seed(100)
+
+  # Creating Training Dataset and Testing Dataset
+  trainIndices <- sample(1:nrow(mainDF), 0.7*nrow(mainDF))  
+
+  train <- mainDF[trainIndices,]  
+  test <- mainDF[-trainIndices,]  
+
+  # Initial Model
+  
+  model_1 <- glm(Attrition ~ ., data = train , family = "binomial")
+
+  summary(model_1)  # AIC:2099
+
+  # Step AIC
+  
+  model_2 <- stepAIC(model_1,direction = "both")
+  
+  summary(model_2) # AIC:2072
+  
