@@ -210,12 +210,3 @@ replace_NA_by_mean <- function(DFcolumn){
   
   # OverTime~Attrition
   mainDF[which(mainDF$overtime_count > 1),] %>%
-    ggplot(aes(x = overtime_count, group = Attrition)) + 
-    geom_bar(aes(y = ..prop..)) + 
-    scale_y_continuous(labels=scales::percent) +
-    labs(title = "Overtiming Vs Attrition", y = "Percentage Attrition", x = "Overtime Frequency")+
-    facet_grid(~Attrition)
-  
-  # More people who overtime a lot throughout the year tend to leave the company
-  
-  
