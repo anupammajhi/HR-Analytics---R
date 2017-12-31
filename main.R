@@ -347,9 +347,3 @@ replace_NA_by_mean <- function(DFcolumn){
 
   summary(model_1)  # AIC:2099
 
-  # Step AIC
-  
-  model_2 <- stepAIC(model_1,direction = "both")
-  
-  summary(model_2) # AIC:2072
-  
