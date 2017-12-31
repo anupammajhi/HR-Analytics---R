@@ -210,3 +210,43 @@ replace_NA_by_mean <- function(DFcolumn){
   
   # OverTime~Attrition
   mainDF[which(mainDF$overtime_count > 1),] %>%
+    ggplot(aes(x = overtime_count, group = Attrition)) + 
+    geom_bar(aes(y = ..prop..)) + 
+    scale_y_continuous(labels=scales::percent) +
+    labs(title = "Overtiming Vs Attrition", y = "Percentage Attrition", x = "Overtime Frequency")+
+    facet_grid(~Attrition)
+  
+  # More people who overtime a lot throughout the year tend to leave the company
+  
+  
+  # BusinessTravel~Attrition
+  mainDF %>%
+    ggplot(aes(x = BusinessTravel, group = Attrition)) + 
+    geom_bar(aes(y = ..prop.., fill = as.factor(..x..)), stat="count") + 
+    scale_y_continuous(labels=scales::percent) +
+    geom_text(aes(y = (..prop..), label = scales::percent((..prop..)/sum(..prop..))), stat = "count", vjust = -0.5)+
+    labs(title = "Business Travel Vs Attrition", y = "Percentage Attrition", x = "Business Travel")+
+    facet_grid(~Attrition)+
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5))
+  
+  # People travelling more tend to stay back with the company 
+  
+  
+  # YearsWithCurrManager~Attrition
+  mainDF %>%
+    ggplot(aes(x = YearsWithCurrManager, group = Attrition)) + 
+    geom_bar(aes(y = ..prop..)) + 
+    scale_y_continuous(labels=scales::percent) +
+    labs(title = "Years With Current Manager Vs Attrition", y = "Percentage Attrition", x = "Years With Current Manager")+
+    facet_grid(~Attrition)
+
+  # People under same manager for a longer time tend to stay back
+  
+    
+      
+#================== OUTLIER TREATMENT =====================  
+  
+# Checking for Outliers
+  sapply(mainDF, function(x){if(is.numeric(x)){boxplot.stats(x)$out}})
+  # MonthlyIncome, NumCompaniesWorked, StockOptionLevels, TotalWorkingYears, TrainingTimesLastYear, YearsAtCompany, YearsSinceLastPromotion, YearsWithCurrManager, PerformanceRating, worked_hours_mean, undertime_count
+  
