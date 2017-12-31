@@ -219,9 +219,3 @@ replace_NA_by_mean <- function(DFcolumn){
   # More people who overtime a lot throughout the year tend to leave the company
   
   
-  # BusinessTravel~Attrition
-  mainDF %>%
-    ggplot(aes(x = BusinessTravel, group = Attrition)) + 
-    geom_bar(aes(y = ..prop.., fill = as.factor(..x..)), stat="count") + 
-    scale_y_continuous(labels=scales::percent) +
-    geom_text(aes(y = (..prop..), label = scales::percent((..prop..)/sum(..prop..))), stat = "count", vjust = -0.5)+
