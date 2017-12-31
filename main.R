@@ -235,12 +235,3 @@ replace_NA_by_mean <- function(DFcolumn){
   # YearsWithCurrManager~Attrition
   mainDF %>%
     ggplot(aes(x = YearsWithCurrManager, group = Attrition)) + 
-    geom_bar(aes(y = ..prop..)) + 
-    scale_y_continuous(labels=scales::percent) +
-    labs(title = "Years With Current Manager Vs Attrition", y = "Percentage Attrition", x = "Years With Current Manager")+
-    facet_grid(~Attrition)
-
-  # People under same manager for a longer time tend to stay back
-  
-    
-      
