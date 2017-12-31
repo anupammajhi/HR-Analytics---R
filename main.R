@@ -282,3 +282,39 @@ replace_NA_by_mean <- function(DFcolumn){
   boxplot(mainDF$PerformanceRating) 
   hist(mainDF$PerformanceRating) # Since there are only 2 levels and both are quite significant, hence not treating outliers
   
+  boxplot(mainDF$worked_hours_mean) # Since the outliers are not extreme cases and data has considerable number of these, hence not treating outliers
+  
+  boxplot(mainDF$undertime_count)
+  boxplot.stats(mainDF$undertime_count) # Since the data is significant and could be vital to the analysis, hence not treating the outliers
+
+
+#========================= MODEL BUILDING - PREPARATIONS =============================  
+    
+# Preparing Variables for Model
+
+  # Variables with only one value  
+  which(sapply(mainDF, function(x){length(levels(as.factor(x)))}) == 1)
+  # Since "EmployeeCount" "Over18" and "StandardHours" have only one variable in columns, hence removing them
+  mainDF <- mainDF[,-which(sapply(mainDF, function(x){length(levels(as.factor(x)))}) == 1)]
+  
+  # Find variables with binary values to convert to 1 and 0
+  which(sapply(mainDF, function(x){length(levels(as.factor(x)))}) == 2) # Attrition,Gender,PerformanceRating
+  
+  levels(mainDF$Attrition)
+  levels(mainDF$Attrition) <- c(0,1) # 1 indicates yes
+  
+  levels(mainDF$Gender)
+  levels(mainDF$Gender) <- c(0,1) # 1 indicates Male
+
+  # Convert ordinal variables to numeric
+  levels(mainDF$BusinessTravel)
+  levels(mainDF$BusinessTravel) <- c(0,2,1) # 0 = Non-Travel , 1 = Travel_Rarely , 2 = Travel_Frequently
+  
+  mainDF$BusinessTravel <- as.numeric(as.character(mainDF$BusinessTravel))
+  
+#======================== MODEL BUILDING - DUMMY VARIABLES =============================
+  
+  # Creating dummies for categorical variables "Department","EducationField","JobRole" and "MaritalStatus"
+  mainDF_facts <- mainDF[,colnames(mainDF) %in% c("Department","EducationField","JobRole","MaritalStatus")]
+  dummies <- data.frame(sapply( mainDF_facts , function(x){data.frame(model.matrix(~x))[,-1]}))
+  mainDF <- cbind(mainDF,dummies)
