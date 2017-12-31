@@ -235,3 +235,50 @@ replace_NA_by_mean <- function(DFcolumn){
   # YearsWithCurrManager~Attrition
   mainDF %>%
     ggplot(aes(x = YearsWithCurrManager, group = Attrition)) + 
+    geom_bar(aes(y = ..prop..)) + 
+    scale_y_continuous(labels=scales::percent) +
+    labs(title = "Years With Current Manager Vs Attrition", y = "Percentage Attrition", x = "Years With Current Manager")+
+    facet_grid(~Attrition)
+
+  # People under same manager for a longer time tend to stay back
+  
+    
+      
+#================== OUTLIER TREATMENT =====================  
+  
+# Checking for Outliers
+  sapply(mainDF, function(x){if(is.numeric(x)){boxplot.stats(x)$out}})
+  # MonthlyIncome, NumCompaniesWorked, StockOptionLevels, TotalWorkingYears, TrainingTimesLastYear, YearsAtCompany, YearsSinceLastPromotion, YearsWithCurrManager, PerformanceRating, worked_hours_mean, undertime_count
+  
+  boxplot(mainDF$MonthlyIncome)
+  boxplot.stats(mainDF$MonthlyIncome)  # Since the outliers are not extreme cases and data has considerable number of these, hence not treating outliers
+  
+  boxplot(mainDF$NumCompaniesWorked)
+  boxplot.stats(mainDF$NumCompaniesWorked)
+  hist(mainDF$NumCompaniesWorked)  # Since the outliers are not extreme cases and data has considerable number of these, hence not treating outliers
+  
+  boxplot(mainDF$StockOptionLevel)
+  boxplot.stats(mainDF$StockOptionLevel)  
+  hist(mainDF$StockOptionLevel)  # Since the outliers are not extreme cases and data has considerable number of these, hence not treating outliers
+  
+  boxplot(mainDF$TotalWorkingYears)
+  boxplot.stats(mainDF$TotalWorkingYears)
+  hist(mainDF$TotalWorkingYears) # Since the outliers are not extreme cases and data shows a gradual change, hence not treating outliers
+  
+  boxplot(mainDF$TrainingTimesLastYear) # Since the outliers are not extreme cases and data has considerable number of these, hence not treating outliers
+  
+  boxplot(mainDF$YearsAtCompany)
+  boxplot.stats(mainDF$YearsAtCompany)
+  hist(mainDF$YearsAtCompany) # Need to cap outliers
+  mainDF[which(mainDF$YearsAtCompany > 22),"YearsAtCompany"] <- 22 # Capping to 22
+
+  boxplot(mainDF$YearsSinceLastPromotion)  
+  boxplot.stats(mainDF$YearsSinceLastPromotion) 
+  hist(mainDF$YearsSinceLastPromotion) # Since the outliers are not extreme cases and data has considerable number of these, hence not treating outliers  
+  
+  boxplot(mainDF$YearsWithCurrManager)  
+  boxplot.stats(mainDF$YearsWithCurrManager) # Since the outliers are not extreme cases and data has considerable number of these, hence not treating outliers
+  
+  boxplot(mainDF$PerformanceRating) 
+  hist(mainDF$PerformanceRating) # Since there are only 2 levels and both are quite significant, hence not treating outliers
+  
