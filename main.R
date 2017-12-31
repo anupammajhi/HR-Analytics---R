@@ -244,9 +244,3 @@ replace_NA_by_mean <- function(DFcolumn){
   
     
       
-#================== OUTLIER TREATMENT =====================  
-  
-# Checking for Outliers
-  sapply(mainDF, function(x){if(is.numeric(x)){boxplot.stats(x)$out}})
-  # MonthlyIncome, NumCompaniesWorked, StockOptionLevels, TotalWorkingYears, TrainingTimesLastYear, YearsAtCompany, YearsSinceLastPromotion, YearsWithCurrManager, PerformanceRating, worked_hours_mean, undertime_count
-  
