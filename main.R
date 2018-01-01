@@ -367,3 +367,41 @@ replace_NA_by_mean <- function(DFcolumn){
   summary(model_3) # AIC:2078
   sort(vif(model_3))  
 
+  # Removing EducationField.xMedical  due to high VIF and low significance     
+  
+  model_4 <- glm(Attrition ~ BusinessTravel+StockOptionLevel+EnvironmentSatisfaction+JobSatisfaction+WorkLifeBalance+
+                   EducationField.xLife.Sciences+EducationField.xMarketing+EducationField.xOther+
+                   EducationField.xTechnical.Degree+JobRole.xHuman.Resources+JobRole.xManager+JobRole.xManufacturing.Director+
+                   JobRole.xSales.Representative+MaritalStatus.xMarried+MaritalStatus.xSingle+Age+NumCompaniesWorked+TotalWorkingYears+
+                   TrainingTimesLastYear+YearsSinceLastPromotion+YearsWithCurrManager+overtime_count, data = train , family = "binomial")
+  
+  summary(model_4) # AIC:2101    
+  sort(vif(model_4))  
+  
+  # Removing EducationField.xLife.Sciences due to low significance
+  
+  model_5 <- glm(Attrition ~ BusinessTravel+StockOptionLevel+EnvironmentSatisfaction+JobSatisfaction+WorkLifeBalance+
+                   EducationField.xMarketing+EducationField.xOther+EducationField.xTechnical.Degree+JobRole.xHuman.Resources+
+                   JobRole.xManager+JobRole.xManufacturing.Director+JobRole.xSales.Representative+MaritalStatus.xMarried+
+                   MaritalStatus.xSingle+Age+NumCompaniesWorked+TotalWorkingYears+TrainingTimesLastYear+YearsSinceLastPromotion+YearsWithCurrManager+overtime_count,
+                 data = train , family = "binomial")
+  
+  summary(model_5) # AIC:2099.9
+  sort(vif(model_5))  
+  
+  # Removing EducationField.xOther due to low significance
+  
+  model_6 <- glm(Attrition ~ BusinessTravel+StockOptionLevel+EnvironmentSatisfaction+JobSatisfaction+WorkLifeBalance+
+                   EducationField.xMarketing+EducationField.xTechnical.Degree+JobRole.xHuman.Resources+
+                   JobRole.xManager+JobRole.xManufacturing.Director+JobRole.xSales.Representative+MaritalStatus.xMarried+
+                   MaritalStatus.xSingle+Age+NumCompaniesWorked+TotalWorkingYears+TrainingTimesLastYear+YearsSinceLastPromotion+YearsWithCurrManager+overtime_count,
+                 data = train , family = "binomial")
+  
+  summary(model_6) # AIC:2098
+  sort(vif(model_6))  
+
+  # Removing EducationField.xMarketing due to low significance
+  
+  model_7 <- glm(Attrition ~ BusinessTravel+StockOptionLevel+EnvironmentSatisfaction+JobSatisfaction+WorkLifeBalance+
+                   EducationField.xTechnical.Degree+JobRole.xHuman.Resources+
+                   JobRole.xManager+JobRole.xManufacturing.Director+JobRole.xSales.Representative+MaritalStatus.xMarried+
