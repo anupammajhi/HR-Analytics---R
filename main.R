@@ -367,11 +367,3 @@ replace_NA_by_mean <- function(DFcolumn){
   summary(model_3) # AIC:2078
   sort(vif(model_3))  
 
-  # Removing EducationField.xMedical  due to high VIF and low significance     
-  
-  model_4 <- glm(Attrition ~ BusinessTravel+StockOptionLevel+EnvironmentSatisfaction+JobSatisfaction+WorkLifeBalance+
-                   EducationField.xLife.Sciences+EducationField.xMarketing+EducationField.xOther+
-                   EducationField.xTechnical.Degree+JobRole.xHuman.Resources+JobRole.xManager+JobRole.xManufacturing.Director+
-                   JobRole.xSales.Representative+MaritalStatus.xMarried+MaritalStatus.xSingle+Age+NumCompaniesWorked+TotalWorkingYears+
-                   TrainingTimesLastYear+YearsSinceLastPromotion+YearsWithCurrManager+overtime_count, data = train , family = "binomial")
-  
