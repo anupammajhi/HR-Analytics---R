@@ -338,12 +338,3 @@ replace_NA_by_mean <- function(DFcolumn){
   # Creating Training Dataset and Testing Dataset
   trainIndices <- sample(1:nrow(mainDF), 0.7*nrow(mainDF))  
 
-  train <- mainDF[trainIndices,]  
-  test <- mainDF[-trainIndices,]  
-
-  # Initial Model
-  
-  model_1 <- glm(Attrition ~ ., data = train , family = "binomial")
-
-  summary(model_1)  # AIC:2099
-
