@@ -332,3 +332,46 @@ replace_NA_by_mean <- function(DFcolumn){
   
 #========================= MODEL BUILDING - LINEAR MODELLING ==============================
   
+  # Set seed for random number reproducibility
+  set.seed(100)
+
+  # Creating Training Dataset and Testing Dataset
+  trainIndices <- sample(1:nrow(mainDF), 0.7*nrow(mainDF))  
+
+  train <- mainDF[trainIndices,]  
+  test <- mainDF[-trainIndices,]  
+
+  # Initial Model
+  
+  model_1 <- glm(Attrition ~ ., data = train , family = "binomial")
+
+  summary(model_1)  # AIC:2099
+
+  # Step AIC
+  
+  model_2 <- stepAIC(model_1,direction = "both")
+  
+  summary(model_2) # AIC:2072
+  
+  sort(vif(model_2))
+
+  
+  # Removing worked_hours_mean due to high VIF and low significance
+  
+  model_3 <- glm(Attrition ~ BusinessTravel+StockOptionLevel+EnvironmentSatisfaction+JobSatisfaction+WorkLifeBalance+
+                   EducationField.xLife.Sciences+EducationField.xMarketing+EducationField.xMedical+EducationField.xOther+
+                   EducationField.xTechnical.Degree+JobRole.xHuman.Resources+JobRole.xManager+JobRole.xManufacturing.Director+
+                   JobRole.xSales.Representative+MaritalStatus.xMarried+MaritalStatus.xSingle+Age+NumCompaniesWorked+TotalWorkingYears+
+                   TrainingTimesLastYear+YearsSinceLastPromotion+YearsWithCurrManager+overtime_count, data = train , family = "binomial")
+
+  summary(model_3) # AIC:2078
+  sort(vif(model_3))  
+
+  # Removing EducationField.xMedical  due to high VIF and low significance     
+  
+  model_4 <- glm(Attrition ~ BusinessTravel+StockOptionLevel+EnvironmentSatisfaction+JobSatisfaction+WorkLifeBalance+
+                   EducationField.xLife.Sciences+EducationField.xMarketing+EducationField.xOther+
+                   EducationField.xTechnical.Degree+JobRole.xHuman.Resources+JobRole.xManager+JobRole.xManufacturing.Director+
+                   JobRole.xSales.Representative+MaritalStatus.xMarried+MaritalStatus.xSingle+Age+NumCompaniesWorked+TotalWorkingYears+
+                   TrainingTimesLastYear+YearsSinceLastPromotion+YearsWithCurrManager+overtime_count, data = train , family = "binomial")
+  
