@@ -332,9 +332,3 @@ replace_NA_by_mean <- function(DFcolumn){
   
 #========================= MODEL BUILDING - LINEAR MODELLING ==============================
   
-  # Set seed for random number reproducibility
-  set.seed(100)
-
-  # Creating Training Dataset and Testing Dataset
-  trainIndices <- sample(1:nrow(mainDF), 0.7*nrow(mainDF))  
-
