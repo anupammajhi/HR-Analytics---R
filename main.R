@@ -503,10 +503,3 @@ replace_NA_by_mean <- function(DFcolumn){
   
   # adding the predicted data to test dataset
   test$prob <- test_pred
-
-  # using the probability cutoff at different values.
-  
-  test_pred_attrition <- factor(ifelse(test_pred >= 0.5, "Yes", "No"))
-  test_actual_attrition <- factor(ifelse(test$Attrition==1,"Yes","No"))  
-  
-  confusionMatrix(test_pred_attrition, test_actual_attrition, positive = "Yes") # Accuracy : 0.86 , Sensitivity : 0.30 , Specificity : 0.96, Balanced Accuracy : 0.63
