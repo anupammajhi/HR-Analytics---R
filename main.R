@@ -497,9 +497,3 @@ replace_NA_by_mean <- function(DFcolumn){
   
   # Predicted probabilities for test data
   
-  test_pred = predict(final_model, type = "response", newdata = test[-1])
-  
-  summary(test_pred)
-  
-  # adding the predicted data to test dataset
-  test$prob <- test_pred
