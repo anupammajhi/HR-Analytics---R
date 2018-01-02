@@ -568,3 +568,42 @@ replace_NA_by_mean <- function(DFcolumn){
 
   pred_object_test<- prediction(test_cutoff_attrition, test_actual_attrition)
   performance_measures_test<- performance(pred_object_test, "tpr", "fpr")  
+
+  ks_table_test <- attr(performance_measures_test, "y.values")[[1]] - 
+    (attr(performance_measures_test, "x.values")[[1]])
+  
+  max(ks_table_test)  # 0.50
+  
+  plot(performance_measures_test,main=paste0(' KS=',round(max(ks_table_test*100,1)),'%'), colorize = T)
+  lines(x=c(0,1),y=c(0,1))
+
+  # Area under the curve
+  auc <- performance(pred_object_test, "auc")
+  auc@y.values[[1]] # 0.7524349
+  
+  
+  # Lift and Gain Chart
+  
+  performance_measures_test <- performance(pred_object_test, "lift", "rpp")
+  plot(performance_measures_test)
+  
+  lift <- function(labels,predicted_prob,groups=10){
+    if(is.factor(labels)){labels <- as.integer(as.character(labels))}
+    if(is.factor(predicted_prob)){predicted_prob <- as.integer(as.character(predicted_prob))}
+    helper = data.frame(cbind(labels,predicted_prob))
+    helper[,"bucket"] = ntile(-helper[,"predicted_prob"],groups)
+    gaintable = helper %>% group_by(bucket) %>%
+      summarise_at(vars(labels ),funs(total = n(),totalresp=sum(., na.rm = TRUE))) %>%
+      mutate(Cumresp = cumsum(totalresp),Gain=Cumresp/sum(totalresp)*100,Cumlift=Gain/(bucket*(100/groups))) 
+    return(gaintable)
+  }
+  
+  Churn_decile = lift(test_actual_attrition, test_pred, groups = 10)
+  View(Churn_decile)  
+
+  # K Fold - Cross Validation
+  cv.binary(final_model, nfolds = 100)
+  # Internal estimate of accuracy = 0.865
+  # Cross-validation estimate of accuracy = 0.862
+  # We see that the accuracy is quite high after 100 folds, hence we conclude that the model is quite stable
+  
