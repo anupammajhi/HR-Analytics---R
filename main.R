@@ -497,3 +497,41 @@ replace_NA_by_mean <- function(DFcolumn){
   
   # Predicted probabilities for test data
   
+  test_pred = predict(final_model, type = "response", newdata = test[-1])
+  
+  summary(test_pred)
+  
+  # adding the predicted data to test dataset
+  test$prob <- test_pred
+
+  # using the probability cutoff at different values.
+  
+  test_pred_attrition <- factor(ifelse(test_pred >= 0.5, "Yes", "No"))
+  test_actual_attrition <- factor(ifelse(test$Attrition==1,"Yes","No"))  
+  
+  confusionMatrix(test_pred_attrition, test_actual_attrition, positive = "Yes") # Accuracy : 0.86 , Sensitivity : 0.30 , Specificity : 0.96, Balanced Accuracy : 0.63
+  
+  test_pred_attrition <- factor(ifelse(test_pred >= 0.2, "Yes", "No"))
+  confusionMatrix(test_pred_attrition, test_actual_attrition, positive = "Yes") # Accuracy : 0.78 , Sensitivity : 0.73 , Specificity : 0.78, Balanced Accuracy : 0.76
+  
+  # Measuring sensitivity, specificity and accuracy with graph
+
+  perform_cutoff_reg <- function(cutoff) 
+  {
+    predicted_attrition <- factor(ifelse(test_pred >= cutoff, "Yes", "No"))
+    conf <- confusionMatrix(predicted_attrition, test_actual_attrition, positive = "Yes")
+    accu <- conf$overall[1]
+    sens <- conf$byClass[1]
+    spec <- conf$byClass[2]
+    out <- t(as.matrix(c(sens, spec, accu))) 
+    colnames(out) <- c("sensitivity", "specificity", "accuracy")
+    return(out)
+  }
+  
+    
+  # Creating 100 x 3 matrix of cutoffs ranging from 0.01 to 0.90
+  
+  s_100 = seq(.01,.90,length=100) # creating a sequence of 100 periods between 0.01 and 0.90
+
+  Out_Mat = matrix(0,100,3)  # Creating a matrix of 100x3
+
