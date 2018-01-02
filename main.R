@@ -475,3 +475,38 @@ replace_NA_by_mean <- function(DFcolumn){
                   data = train , family = "binomial")
   
   summary(model_13) # AIC:2104
+  sort(vif(model_13))
+
+  # Removing TrainingTimesLastYear due to low significance    
+  
+  model_14 <- glm(Attrition ~ BusinessTravel+EnvironmentSatisfaction+JobSatisfaction+WorkLifeBalance+
+                    JobRole.xManufacturing.Director+MaritalStatus.xSingle+
+                    Age+NumCompaniesWorked+TotalWorkingYears+
+                    YearsSinceLastPromotion+YearsWithCurrManager+overtime_count,
+                  data = train , family = "binomial")
+  
+  summary(model_14)  # AIC:2113   
+  sort(vif(model_14))
+
+  # All values are significant and AIC seems to be within expected value hence finalizing model  
+    
+  final_model <- model_14
+  summary(final_model)
+  
+#========================== MODEL EVALUATION - TESTING MODEL ==========================
+  
+  # Predicted probabilities for test data
+  
+  test_pred = predict(final_model, type = "response", newdata = test[-1])
+  
+  summary(test_pred)
+  
+  # adding the predicted data to test dataset
+  test$prob <- test_pred
+
+  # using the probability cutoff at different values.
+  
+  test_pred_attrition <- factor(ifelse(test_pred >= 0.5, "Yes", "No"))
+  test_actual_attrition <- factor(ifelse(test$Attrition==1,"Yes","No"))  
+  
+  confusionMatrix(test_pred_attrition, test_actual_attrition, positive = "Yes") # Accuracy : 0.86 , Sensitivity : 0.30 , Specificity : 0.96, Balanced Accuracy : 0.63
