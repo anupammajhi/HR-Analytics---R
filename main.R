@@ -535,3 +535,44 @@ replace_NA_by_mean <- function(DFcolumn){
 
   Out_Mat = matrix(0,100,3)  # Creating a matrix of 100x3
 
+  # filling up matrix with values at different cutoffs
+  for(i in 1:100){
+    Out_Mat[i,] = perform_cutoff_reg(s_100[i])
+  } 
+
+  # plot sensitivity, specificity, accuracy graph
+  plot(s_100, Out_Mat[,1],xlab="Cutoff",ylab="Value",cex.lab=1.5,cex.axis=1.5,ylim=c(0,1),type="l",lwd=2,axes=FALSE,col=2)
+  axis(1,seq(0,1,length=5),seq(0,1,length=5),cex.lab=1.5)
+  axis(2,seq(0,1,length=5),seq(0,1,length=5),cex.lab=1.5)
+  lines(s_100,Out_Mat[,2],col="green",lwd=2)
+  lines(s_100,Out_Mat[,3],col=4,lwd=2)
+  box()
+  legend(0,.50,col=c(2,"green",4,"red"),lwd=c(2,2,2,2),c("Sensitivity","Specificity","Accuracy"))
+
+  # finding intersecting values 
+  cutoff <- s_100[which(abs(Out_Mat[,1]-Out_Mat[,2])<0.02)]
+  # 0.18 is optimal as per calculation based on the intersection
+  
+  test_cutoff_attrition <- factor(ifelse(test_pred >= 0.18, "Yes", "No"))
+  confusionMatrix(test_cutoff_attrition, test_actual_attrition, positive = "Yes") # Accuracy : 0.75 , Sensitivity : 0.76 , Specificity : 0.75, Balanced Accuracy : 0.75
+
+  # Cutoff depends on the business scenario. We will settle at 0.2 since that gives us better sensitivity and specificity and has a good Balanced Accuracy
+  # Depending on the business requirement changes, we can be flexible with the cutoff value to suit the needs
+  cutoff <- 0.2
+  
+  
+  # KS Statistics
+  
+  test_cutoff_attrition <- ifelse(test_cutoff_attrition=="Yes",1,0)
+  test_actual_attrition <- ifelse(test_actual_attrition=="Yes",1,0)
+
+  pred_object_test<- prediction(test_cutoff_attrition, test_actual_attrition)
+  performance_measures_test<- performance(pred_object_test, "tpr", "fpr")  
+
+  ks_table_test <- attr(performance_measures_test, "y.values")[[1]] - 
+    (attr(performance_measures_test, "x.values")[[1]])
+  
+  max(ks_table_test)  # 0.50
+  
+  plot(performance_measures_test,main=paste0(' KS=',round(max(ks_table_test*100,1)),'%'), colorize = T)
+  lines(x=c(0,1),y=c(0,1))
