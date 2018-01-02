@@ -568,11 +568,3 @@ replace_NA_by_mean <- function(DFcolumn){
 
   pred_object_test<- prediction(test_cutoff_attrition, test_actual_attrition)
   performance_measures_test<- performance(pred_object_test, "tpr", "fpr")  
-
-  ks_table_test <- attr(performance_measures_test, "y.values")[[1]] - 
-    (attr(performance_measures_test, "x.values")[[1]])
-  
-  max(ks_table_test)  # 0.50
-  
-  plot(performance_measures_test,main=paste0(' KS=',round(max(ks_table_test*100,1)),'%'), colorize = T)
-  lines(x=c(0,1),y=c(0,1))
